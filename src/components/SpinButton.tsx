@@ -2,15 +2,21 @@ import React, { useState, MouseEvent } from "react";
 import "./SpinButton.css";
 
 const SpinButton: React.FC = () => {
-  const [count, setCount] = useState<number>(0);
+  const [count, setCount] = useState<number>(1);
+  const [message, setMessage] = useState<string>();
   const [isTooltipVisible, setIsTooltipVisible] = useState<boolean>(false);
 
   const increment = () => {
-    setCount((prevCount) => prevCount + 1);
+    if (count < 3) {
+      setCount((prevCount) => prevCount + 1);
+      setMessage(`성인 승객${1 + count}명 추가`);
+    }
   };
 
   const decrement = () => {
-    setCount((prevCount) => prevCount - 1);
+    if (count > 1) {
+      setCount((prevCount) => prevCount - 1);
+    }
   };
 
   const toggleTooltip = (event: MouseEvent<HTMLDivElement>) => {
@@ -22,32 +28,47 @@ const SpinButton: React.FC = () => {
       <div>
         <h1>승객 선택</h1>
         <div className="spinButtonLabel">
-          <label>성인</label>
+          <label htmlFor="adultCount">성인</label>
           <div
             className="helpIcon"
             onMouseEnter={toggleTooltip}
             onMouseLeave={toggleTooltip}
+            aria-describedby="tooltip"
           >
             ?
-            {isTooltipVisible && (
-              <span className="tooltip">최대 인원수는 3명까지 가능합니다</span>
-            )}
           </div>
         </div>
-        <button onClick={decrement} className="spinButton">
+        <button
+          onClick={decrement}
+          className="spinButton"
+          aria-label="성인 탑승자 한명 줄이기"
+        >
           -
         </button>
         <input
           type="text"
           role="spinbutton"
+          id="adultCount"
+          aria-label={`성인 ${count} 명`}
+          aria-value={count}
           readOnly
           className="spinButtonInput"
           value={count}
         />
-        <button onClick={increment} className="spinButton">
+        <button
+          onClick={increment}
+          className="spinButton"
+          aria-label="성인 탑승자 한명 늘리기"
+        >
           +
         </button>
+        {isTooltipVisible && (
+          <span id="tooltip" className="tooltip">
+            최대 인원수는 3명까지 가능합니다
+          </span>
+        )}
       </div>
+      <span aria-live="assertive">{message}</span>
     </section>
   );
 };
