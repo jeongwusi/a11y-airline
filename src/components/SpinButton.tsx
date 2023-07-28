@@ -3,19 +3,20 @@ import "./SpinButton.css";
 
 const SpinButton: React.FC = () => {
   const [count, setCount] = useState<number>(1);
-  const [message, setMessage] = useState<string>();
   const [isTooltipVisible, setIsTooltipVisible] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>();
 
   const increment = () => {
     if (count < 3) {
       setCount((prevCount) => prevCount + 1);
-      setMessage(`성인 승객${1 + count}명 추가`);
+      setMessage(`성인 ${count + 1}명 추가`);
     }
   };
 
   const decrement = () => {
     if (count > 1) {
       setCount((prevCount) => prevCount - 1);
+      setMessage(`성인 1명 제거`);
     }
   };
 
@@ -49,8 +50,7 @@ const SpinButton: React.FC = () => {
           type="text"
           role="spinbutton"
           id="adultCount"
-          aria-label={`성인 ${count} 명`}
-          aria-value={count}
+          aria-label="성인"
           readOnly
           className="spinButtonInput"
           value={count}
